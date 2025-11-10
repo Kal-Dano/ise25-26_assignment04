@@ -3,3 +3,6 @@ Außerdem bietet es die option, keinen code für trainingszwecke weiterzugeben u
 c)Wir benutzen das gegebene PRP Format und erweitern es um ein Mustread: osmxmlexample.txt, um den kontext zusätzlich um ein besipiel zu erweitern. 
 Die Prp ist wie folgt strukturiert: Sie definiert eine rolle für die Ki, eine Aufgabe mit Erfolgskriterium, eine user-story, sowie zu berücksichtigende dateien.
 osmxmlexample.txtist einfach nur das beispiel der openstreetmap.org .
+d) Das Setup von Cursor hat länger gedauert als dann mit dem PRP-Format den entsprechenden Code zu generieren. Nach dem ersten Versuch hat sowohl der Build als auch ein manueller test der api funktioniert.
+Als wir einen anderen Node hinzugefügt habe, hat genauso fast alles funktioniert, irgendeine Information fehlte in der xml datei. Wir haben zusätzlich der Ki befohlen, default cases einzubauen, und dann funktionierte auch der manuelle test mit anderer node id.
+Die einzigen dateien, die wir bei der bearbeitung geöffnet hatten, war die prp, readme und die neue osmlexample.txt. Dafür funktioniert alles erschreckend gut.
