@@ -81,23 +81,43 @@ public class PosServiceImpl implements PosService {
 
     /**
      * Converts an OSM node to a POS domain object.
-     * Note: This is a stub implementation and should be replaced with real mapping logic.
      */
     private @NonNull Pos convertOsmNodeToPos(@NonNull OsmNode osmNode) {
-        if (osmNode.nodeId().equals(5589879349L)) {
-            return Pos.builder()
-                    .name("Rada Coffee & Rösterei")
-                    .description("Caffé und Rösterei")
-                    .type(PosType.CAFE)
-                    .campus(CampusType.ALTSTADT)
-                    .street("Untere Straße")
-                    .houseNumber("21")
-                    .postalCode(69117)
-                    .city("Heidelberg")
-                    .build();
-        } else {
+        // Defaults for missing information
+        String defaultName = "Unnamed OSM node " + osmNode.nodeId();
+        String defaultDescription = "Imported from OpenStreetMap node " + osmNode.nodeId();
+        String defaultStreet = "Unknown Street";
+        String defaultHouseNumber = "?";
+        int defaultPostcode = 0;
+        String defaultCity = "Unknown";
+
+        // Determine POS type from OSM tags
+        PosType type = mapOsmTagsToPosType(osmNode);
+
+        // For now, default campus; could be derived later using coordinates/geofencing
+        CampusType campus = CampusType.ALTSTADT;
+
+        String name = osmNode.name() != null ? osmNode.name() : defaultName;
+        String street = osmNode.street() != null ? osmNode.street() : defaultStreet;
+        String houseNumber = osmNode.houseNumber() != null ? osmNode.houseNumber() : defaultHouseNumber;
+        Integer postalCode = osmNode.postalCode() != null ? osmNode.postalCode() : defaultPostcode;
+        String city = osmNode.city() != null ? osmNode.city() : defaultCity;
+
+        // Basic sanity check: if even name is missing after defaults, abort
+        if (name.isBlank()) {
             throw new OsmNodeMissingFieldsException(osmNode.nodeId());
         }
+
+        return Pos.builder()
+                .name(name)
+                .description(defaultDescription)
+                .type(type)
+                .campus(campus)
+                .street(street)
+                .houseNumber(houseNumber)
+                .postalCode(postalCode)
+                .city(city)
+                .build();
     }
 
     /**
@@ -118,5 +138,32 @@ public class PosServiceImpl implements PosService {
             log.error("Error upserting POS '{}': {}", pos.name(), e.getMessage());
             throw e;
         }
+    }
+
+    private PosType mapOsmTagsToPosType(OsmNode osmNode) {
+        String amenity = osmNode.amenity();
+        String shop = osmNode.shop();
+        if (amenity != null) {
+            String a = amenity.toLowerCase();
+            if (a.contains("cafe") || a.contains("coffee")) {
+                return PosType.CAFE;
+            }
+            if (a.contains("vending")) {
+                return PosType.VENDING_MACHINE;
+            }
+            if (a.contains("cafeteria") || a.contains("canteen")) {
+                return PosType.CAFETERIA;
+            }
+        }
+        if (shop != null) {
+            String s = shop.toLowerCase();
+            if (s.contains("bakery")) {
+                return PosType.BAKERY;
+            }
+            if (s.contains("coffee") || s.contains("cafe")) {
+                return PosType.CAFE;
+            }
+        }
+        return PosType.CAFE;
     }
 }

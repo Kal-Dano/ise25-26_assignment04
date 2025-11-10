@@ -1,0 +1,5 @@
+b)Wir haben uns für cursor und gegen ki integration in unsere bestehenden ides entschieden, weil es ein leichtes setup hat, und genauso schnell wieder runtergeschmissen werden kann.
+Außerdem bietet es die option, keinen code für trainingszwecke weiterzugeben und keine daten in clouds zuu speichern, was zwar nicht den besten datenschutz dartsellt, aber immerhin für eine kostenlose demo schon ganz gut ist.
+c)Wir benutzen das gegebene PRP Format und erweitern es um ein Mustread: osmxmlexample.txt, um den kontext zusätzlich um ein besipiel zu erweitern. 
+Die Prp ist wie folgt strukturiert: Sie definiert eine rolle für die Ki, eine Aufgabe mit Erfolgskriterium, eine user-story, sowie zu berücksichtigende dateien.
+osmxmlexample.txtist einfach nur das beispiel der openstreetmap.org .
